@@ -5,7 +5,7 @@ import { EVENT } from "./lib/config.mjs";
 //   GET    /.netlify/functions/signups            -> all sign-ups + totals
 //   DELETE /.netlify/functions/signups?key=...    -> remove one (frees its spots and dish)
 export default async (req) => {
-  const expected = process.env.ADMIN_PASSWORD;
+  const expected = (globalThis.Netlify?.env?.get("ADMIN_PASSWORD") ?? process.env.ADMIN_PASSWORD ?? "").trim();
   if (!expected) return json({ error: "ADMIN_PASSWORD is not set on this site." }, 500);
   if (req.headers.get("x-admin-password") !== expected) return json({ error: "Wrong password." }, 401);
 
