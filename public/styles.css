@@ -153,3 +153,5 @@ button[type=submit] { max-width: 420px; display: block; margin-left: auto; margi
 .notice, .done { text-align: center; }
 .arrive { text-align: center; }
 .foot { text-align: center; }
+.hero .facts { text-align: center; }
+.card h2 { text-align: center; align-items: center; }
