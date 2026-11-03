@@ -19,8 +19,11 @@ export function tally(signups) {
   const people = signups.reduce((n, s) => n + (Number(s.headcount) || 0), 0);
   const claimed = Object.fromEntries(DISHES.map((d) => [d.id, 0]));
   for (const s of signups) if (s.dishId in claimed) claimed[s.dishId] += Number(s.dishQty) || 0;
+  const groups = signups.filter((s) => s.signupType === "group").length;
   return {
     people,
+    groups,
+    groupsLeft: Math.max(0, EVENT.maxGroups - groups),
     spotsLeft: Math.max(0, EVENT.volunteerCap - people),
     dishes: DISHES.map((d) => ({ ...d, claimed: claimed[d.id], remaining: Math.max(0, d.needed - claimed[d.id]) })),
   };

@@ -18,5 +18,5 @@ export default async (req) => {
 
   const signups = await allSignups();
   const t = tally(signups);
-  return json({ cap: EVENT.volunteerCap, people: t.people, spotsLeft: t.spotsLeft, dishes: t.dishes, signups });
+  return json({ cap: EVENT.volunteerCap, maxGroups: EVENT.maxGroups, groups: t.groups, people: t.people, spotsLeft: t.spotsLeft, dishes: t.dishes, signups });
 };

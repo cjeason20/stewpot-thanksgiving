@@ -71,6 +71,7 @@
     $("#people").innerHTML = `
       <div class="stat"><b>${d.people} / ${d.cap}</b><small>volunteers signed up</small><div class="bar"><i style="width:${Math.min(100, d.people / d.cap * 100)}%"></i></div></div>
       <div class="stat"><b>${d.spotsLeft}</b><small>spots left</small></div>
+      <div class="stat"><b>${d.groups} / ${d.maxGroups}</b><small>groups signed up</small></div>
       <div class="stat"><b>${d.signups.length}</b><small>sign-ups (individuals + groups)</small></div>`;
     $("#dishes").innerHTML = d.dishes.map((x) => `
       <div class="stat"><b>${x.claimed} / ${x.needed}</b><small>${esc(x.name)} · ${esc(x.unitPlural)}</small>
@@ -80,7 +81,7 @@
       <td>${esc(new Date(s.submittedAt).toLocaleString("en-US", { timeZone: "America/Chicago", dateStyle: "short", timeStyle: "short" }))}</td>
       <td>${esc(s.contact.firstName)} ${esc(s.contact.lastName)}</td>
       <td>${esc(s.contact.email)}<br>${esc(s.contact.phone)}</td>
-      <td>${s.group ? `${esc(s.group.name)}<br><small>${esc(s.group.type === "Other" ? s.group.typeOther : s.group.type)}</small><br><small>+ ${s.group.members.map(esc).join(", ")}</small>` : "—"}</td>
+      <td>${s.group ? `${esc(s.group.name)}<br><small>+ ${s.group.members.map(esc).join(", ")}</small>` : "—"}</td>
       <td>${s.headcount}</td>
       <td>${s.dishQty} ${esc(s.dishUnit)} ${esc(s.dishName.toLowerCase())}</td>
       <td>${s.duties.map(esc).join(", ") || "—"}</td>
@@ -110,9 +111,9 @@
   });
   $("#csv").addEventListener("click", () => {
     if (!last) return;
-    const cols = ["Submitted", "Type", "First name", "Last name", "Email", "Phone", "Group name", "Group type", "Other members", "Headcount", "Dish", "Quantity", "Unit", "Duties", "Notes"];
+    const cols = ["Submitted", "Type", "First name", "Last name", "Email", "Phone", "Group name", "Other members", "Headcount", "Dish", "Quantity", "Unit", "Duties", "Notes"];
     const rows = last.signups.map((s) => [s.submittedAt, s.signupType, s.contact.firstName, s.contact.lastName, s.contact.email, s.contact.phone,
-      s.group?.name || "", s.group ? (s.group.type === "Other" ? s.group.typeOther : s.group.type) : "", s.group?.members.join("; ") || "",
+      s.group?.name || "", s.group?.members.join("; ") || "",
       s.headcount, s.dishName, s.dishQty, s.dishUnit, s.duties.join("; "), s.notes]);
     const csv = [cols, ...rows].map((r) => r.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",")).join("\r\n");
     const a = document.createElement("a");

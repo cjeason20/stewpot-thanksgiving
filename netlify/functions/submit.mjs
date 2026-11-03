@@ -1,4 +1,4 @@
-import { EVENT, DISHES, DUTIES, GROUP_TYPES } from "./lib/config.mjs";
+import { EVENT, DISHES, DUTIES } from "./lib/config.mjs";
 import { allSignups, tally, signupStore, json, isClosed } from "./lib/store.mjs";
 
 const clean = (v, max = 200) => String(v ?? "").trim().slice(0, max);
@@ -37,15 +37,8 @@ export default async (req) => {
       errors.push(`Groups can have 2 to ${EVENT.maxGroupSize} people (including you).`);
     const members = (Array.isArray(b.members) ? b.members : []).map((m) => clean(m, 120)).filter(Boolean);
     if (members.length !== headcount - 1) errors.push("Enter the name of each person in your group.");
-    group = {
-      name: clean(b.groupName, 120),
-      type: GROUP_TYPES.includes(b.groupType) ? b.groupType : "",
-      typeOther: b.groupType === "Other" ? clean(b.groupTypeOther, 120) : "",
-      members,
-    };
+    group = { name: clean(b.groupName, 120), members };
     if (!group.name) errors.push("Enter your group's name.");
-    if (!group.type) errors.push("Choose what kind of group you are.");
-    if (group.type === "Other" && !group.typeOther) errors.push("Tell us what kind of group you are.");
   }
 
   const duties = (Array.isArray(b.duties) ? b.duties : []).filter((d) => DUTIES.includes(d));
@@ -63,6 +56,8 @@ export default async (req) => {
   const t = tally(signups);
   if (signups.some((s) => s.contact?.email === contact.email))
     return json({ error: "This email is already signed up. Contact Stewpot if you need to change your sign-up." }, 409);
+  if (signupType === "group" && t.groupsLeft === 0)
+    return json({ error: "All group spots are filled, but you can still sign up as an individual.", refresh: true }, 409);
   if (headcount > t.spotsLeft)
     return json({ error: t.spotsLeft ? `Only ${t.spotsLeft} volunteer spot${t.spotsLeft === 1 ? "" : "s"} left.` : "All volunteer spots are filled.", refresh: true }, 409);
   const live = t.dishes.find((d) => d.id === dish.id);

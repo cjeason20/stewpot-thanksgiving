@@ -20,7 +20,24 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.55 "Sou
 .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
 h1, h2 { font-family: Fraunces, Georgia, serif; line-height: 1.15; }
 
-.hero { background: #3b2a20; color: #fbf3e8; padding: 40px 0 32px; }
+.hero { position: relative; overflow: hidden; background: radial-gradient(120% 90% at 85% 10%, #5a3a26 0%, #3b2a20 60%); color: #fbf3e8; padding: 40px 0 52px; }
+.hero-grid { position: relative; display: grid; grid-template-columns: 1fr 220px; gap: 24px; align-items: center; }
+.hero-art { width: 100%; height: auto; }
+.hero-leaves { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .35; pointer-events: none; }
+.garland { position: absolute; left: 0; right: 0; bottom: -1px; width: 100%; height: 24px; display: block; }
+@media (max-width: 640px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 0; }
+  .hero-art { order: -1; width: 150px; margin: -12px 0 6px -8px; }
+}
+.leaf-red { color: #b8432a; }
+.leaf-gold { color: #d99a2b; }
+.leaf-brown { color: #8a5a34; }
+.done-art { width: 120px; height: 90px; display: block; margin: 0 auto 6px; }
+.done h2 { text-align: center; }
+.arrive { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin: 14px 0; }
+.arrive h3 { margin: 0 0 8px; font: 700 17px Fraunces, Georgia, serif; }
+.arrive p { margin: 6px 0; }
+.arrive a { color: var(--brand); font-weight: 600; }
 .eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: 13px; font-weight: 700; color: #e9b48f; margin: 0 0 10px; }
 .hero h1 { font-size: clamp(30px, 6vw, 44px); margin: 0 0 12px; }
 .hero h1 em { color: #f0a477; font-style: italic; }

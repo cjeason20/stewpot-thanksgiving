@@ -1,5 +1,9 @@
 (() => {
   const API = "/.netlify/functions";
+  // EmailJS — same account, service and client template as the intake form.
+  // The template must have "To Email" = {{to_email}} and use {{subject}} / {{message}}.
+  const EJS = { publicKey: "I1vXCOCxiey4n_sN2", serviceId: "service_el38inc", templateId: "template_slosb0f" };
+  try { window.emailjs?.init({ publicKey: EJS.publicKey }); } catch {}
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const form = $("#form");
@@ -29,19 +33,17 @@
     if (data.closed || !anyDish) { form.hidden = true; $("#closed").hidden = false; return; }
     form.hidden = false;
 
-    // Group option only if at least 2 spots remain.
+    // Group option only while group slots remain and at least 2 people can still fit.
     const groupInput = $('input[name=signupType][value=group]');
-    const canGroup = data.spotsLeft >= 2;
+    const canGroup = data.groupsLeft > 0 && data.spotsLeft >= 2;
     groupInput.disabled = !canGroup;
     $("#group-choice").classList.toggle("disabled", !canGroup);
-    $("#group-choice-note").textContent = canGroup
-      ? `Family, congregation, school… up to ${Math.min(ev.maxGroupSize, data.spotsLeft)} people`
-      : "Only 1 spot left — individual sign-ups only";
+    $("#group-choice-note").textContent = !data.groupsLeft
+      ? "All group spots are filled — individual sign-ups are still open"
+      : data.spotsLeft < 2
+        ? "Only 1 spot left — individual sign-ups only"
+        : `Up to ${Math.min(ev.maxGroupSize, data.spotsLeft)} people · ${data.groupsLeft} of ${ev.maxGroups} group spots left`;
     if (!canGroup && groupInput.checked) { groupInput.checked = false; onTypeChange(); }
-
-    // Group type options (once).
-    const gt = form.groupType;
-    if (gt.options.length === 1) data.groupTypes.forEach((t) => gt.add(new Option(t, t)));
 
     // Group size limited by both the group cap and spots left.
     const maxSize = Math.min(ev.maxGroupSize, data.spotsLeft);
@@ -107,7 +109,7 @@
     return {
       signupType: type,
       firstName: f.firstName.value, lastName: f.lastName.value, email: f.email.value, phone: f.phone.value,
-      groupName: f.groupName.value, groupType: f.groupType.value, groupTypeOther: f.groupTypeOther.value,
+      groupName: f.groupName.value,
       groupSize: type === "group" ? +f.groupSize.value : 1,
       members: $$("#member-inputs input").map((i) => i.value),
       duties: $$("input[name=duties]:checked").map((i) => i.value),
@@ -129,8 +131,6 @@
       () => f.phone.value.replace(/\D/g, "").length < 10 && ["Enter a phone number with area code.", f.phone],
       ...(p.signupType === "group" ? [
         () => req(f.groupName, "Enter your group's name."),
-        () => req(f.groupType, "Choose what kind of group you are."),
-        () => p.groupType === "Other" && req(f.groupTypeOther, "Tell us what kind of group you are."),
         () => { const e = $$("#member-inputs input").find((i) => !i.value.trim()); return e && ["Enter the name of each person in your group.", e]; },
       ] : []),
       () => !p.dishId && ["Pick a dish to bring.", $("#dishes")],
@@ -155,7 +155,6 @@
     const n = e.target.name;
     if (n === "signupType") onTypeChange();
     if (n === "groupSize") renderMembers();
-    if (n === "groupType") $("#group-other").hidden = e.target.value !== "Other";
     if (n === "dishId") onDishChange();
   });
   form.addEventListener("input", (e) => e.target.classList.remove("invalid"));
@@ -176,11 +175,25 @@
         return showError(out.error || "Something went wrong. Please try again.");
       }
       form.hidden = true;
+      const ev = data.event;
       const who = p.signupType === "group" ? `Your group of ${out.summary.headcount} is` : "You're";
       $("#done-text").textContent = `${who} confirmed to serve, and you're bringing ${out.summary.dish}.`;
-      $("#done-time").textContent = data.event.arrival;
-      $("#done-date").textContent = data.event.dateLabel;
+      $("#done-time").textContent = ev.arrival;
+      $("#done-date").textContent = ev.dateLabel;
+      $("#done-address").textContent = ev.address.join(", ");
+      $("#done-map").href = ev.mapUrl;
+      $("#done-parking").textContent = ev.parking;
+      $("#done-arrival").textContent = ev.arrivalNote;
+      $("#done-phone").textContent = ev.phone;
+      $("#done-phone").href = "tel:" + ev.phone.replace(/\D/g, "");
       $("#done").hidden = false; $("#done").focus();
+      sendConfirmation(p, out.summary).then((ok) => {
+        const el = $("#done-email");
+        el.hidden = false;
+        el.textContent = ok
+          ? `A confirmation email with these details is on its way to ${p.email.trim()}.`
+          : "We couldn't send your confirmation email, but your sign-up is saved. Please screenshot or save this page for the details below.";
+      });
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch {
       showError("We couldn't reach the server. Check your connection and try again.");
@@ -188,6 +201,50 @@
       btn.disabled = false; btn.textContent = label;
     }
   });
+
+  // Confirmation email via EmailJS (plain text, like the intake form's client email).
+  async function sendConfirmation(p, summary) {
+    if (!window.emailjs) return false;
+    const ev = data.event;
+    const group = p.signupType === "group"
+      ? `Group: ${p.groupName.trim()} (${summary.headcount} people: ${[`${p.firstName.trim()} ${p.lastName.trim()}`, ...p.members.map((m) => m.trim())].join(", ")})\n`
+      : "";
+    const duties = p.duties.length ? `Duty preferences: ${p.duties.join(", ")}\n` : "";
+    const message =
+`Hi ${p.firstName.trim()},
+
+Thank you for signing up to volunteer at Stewpot's ${ev.title}! Here are your details:
+
+Date: ${ev.dateLabel}
+Arrive by: ${ev.arrival} (service runs ${ev.serviceWindow})
+${group}You're bringing: ${summary.dish}, warm and ready to serve
+${duties}
+WHERE TO GO
+${ev.address.join("\n")}
+Map: ${ev.mapUrl}
+
+PARKING
+${ev.parking}
+
+${ev.arrivalNote} If you have any questions in the meantime or need assistance when you arrive, please call ${ev.phone}.
+
+If your plans change, please call us so we can offer your spot to someone else.
+
+With gratitude,
+Stewpot Community Services`;
+    try {
+      await window.emailjs.send(EJS.serviceId, EJS.templateId, {
+        to_email: p.email.trim(),
+        to_name: p.firstName.trim(),
+        subject: `You're confirmed: Stewpot Thanksgiving, ${ev.dateLabel}`,
+        message,
+      });
+      return true;
+    } catch (err) {
+      console.warn("Confirmation email failed:", err);
+      return false;
+    }
+  }
 
   load().catch(() => { $("#loading").hidden = true; $("#load-error").hidden = false; });
 })();

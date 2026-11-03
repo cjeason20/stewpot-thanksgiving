@@ -9,7 +9,13 @@ export const EVENT = {
   location: "Stewpot Community Kitchen",
   volunteerCap: 35,      // total people (a group of 3 counts as 3)
   maxGroupSize: 3,
+  maxGroups: 5,          // most group sign-ups accepted (individuals don't count toward this)
   closeAt: null,         // optional ISO string, e.g. "2026-11-24T23:59:00-06:00"
+  address: ["1100 West Capitol Street", "Jackson, MS 39203"],
+  mapUrl: "https://www.google.com/maps/search/1100+West+Capitol+Street+Jackson,+MS+39203",
+  phone: "601-808-3050",
+  parking: "Please park in the lot reserved for volunteers. The lot is gated and will have a few Stewpot vehicles parked inside. As a landmark, it's located right next to the old Masonic Temple building on the corner of Monument and Capitol Streets.",
+  arrivalNote: "Once you arrive, ring the doorbell beside the white double doors, and someone will let you in.",
 };
 
 export const DUTIES = [
@@ -28,7 +34,6 @@ const FULL_PAN = '20 3/4" × 12 3/4" × 2 1/5" full-size disposable aluminum ste
 export const DISHES = [
   { id: "sweet-tea",       name: "Sweet tea",          needed: 20, unit: "gallon",          unitPlural: "gallons",          maxPer: 5,  details: "Brewed and sweetened, in gallon jugs." },
   { id: "candied-yams",    name: "Candied yams",       needed: 5,  unit: "full-size pan",   unitPlural: "full-size pans",   maxPer: 2,  details: FULL_PAN },
-  { id: "mac-and-cheese",  name: "Mac and cheese",     needed: 3,  unit: "full-size pan",   unitPlural: "full-size pans",   maxPer: 2,  details: FULL_PAN },
   { id: "potato-salad",    name: "Potato salad",       needed: 3,  unit: "full-size pan",   unitPlural: "full-size pans",   maxPer: 2,  details: FULL_PAN },
   { id: "collard-greens",  name: "Collard greens",     needed: 5,  unit: "full-size pan",   unitPlural: "full-size pans",   maxPer: 2,  details: FULL_PAN },
   { id: "green-beans",     name: "Green beans",        needed: 5,  unit: "full-size pan",   unitPlural: "full-size pans",   maxPer: 2,  details: FULL_PAN },
@@ -39,4 +44,3 @@ export const DISHES = [
   { id: "sweet-potato-pie",name: "Sweet potato pie",   needed: 25, unit: "pie",             unitPlural: "pies",             maxPer: 5,  details: "Whole pies — we'll slice them the day of." },
 ];
 
-export const GROUP_TYPES = ["Family", "Congregation / faith group", "School", "Business / workplace", "Civic or community group", "Other"];

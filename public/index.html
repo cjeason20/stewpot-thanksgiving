@@ -11,8 +11,51 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<!-- Shared Thanksgiving artwork (original illustrations), reused with <use>. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="maple" viewBox="-22 -22 44 48">
+      <path fill="currentColor" d="M0-21 4-10 12-15 10-4 21-3 13 4 17 13 5 9 2 20 0 14-2 20-5 9-17 13-13 4-21-3-10-4-12-15-4-10Z"/>
+      <path d="M0 14V25" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M0 12V-12M0 2 9-2M0 2-9-2M0-5 6-10M0-5-6-10" stroke="rgba(0,0,0,.22)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="oak" viewBox="-14 -22 28 46">
+      <path fill="currentColor" d="M0-20C4-20 5-16 4-13 9-14 10-9 6-6 11-6 11 0 6 1 10 3 9 8 4 7 6 11 3 15 0 14-3 15-6 11-4 7-9 8-10 3-6 1-11 0-11-6-6-6-10-9-9-14-4-13-5-16-4-20 0-20Z"/>
+      <path d="M0 13V23M0 12V-16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M0 12V-16" stroke="rgba(0,0,0,.22)" stroke-width="1.2" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="pumpkin" viewBox="0 0 100 100">
+      <path d="M50 30C52 20 56 13 63 9" stroke="#5b3b1f" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <ellipse cx="28" cy="62" rx="22" ry="29" fill="#c8561f"/>
+      <ellipse cx="72" cy="62" rx="22" ry="29" fill="#c8561f"/>
+      <ellipse cx="38" cy="62" rx="20" ry="31" fill="#e0752f"/>
+      <ellipse cx="62" cy="62" rx="20" ry="31" fill="#e0752f"/>
+      <ellipse cx="50" cy="62" rx="16" ry="32" fill="#ee8a3c"/>
+      <path d="M50 32C47 45 47 80 50 93" stroke="#c8561f" stroke-width="1.5" fill="none" opacity=".6"/>
+      <path d="M57 26C66 18 78 20 80 28 72 27 64 30 57 26Z" fill="#6f8a45"/>
+      <path d="M44 28C38 22 40 15 45 14" stroke="#6f8a45" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="wheat" viewBox="0 0 30 120">
+      <path d="M15 118C15 90 14 60 15 30" stroke="#d9b26a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <g fill="#e8c27a">
+        <ellipse cx="15" cy="14" rx="3.5" ry="7"/>
+        <ellipse cx="10" cy="24" rx="3.5" ry="7" transform="rotate(-28 10 24)"/><ellipse cx="20" cy="24" rx="3.5" ry="7" transform="rotate(28 20 24)"/>
+        <ellipse cx="10" cy="36" rx="3.5" ry="7" transform="rotate(-28 10 36)"/><ellipse cx="20" cy="36" rx="3.5" ry="7" transform="rotate(28 20 36)"/>
+        <ellipse cx="10" cy="48" rx="3.5" ry="7" transform="rotate(-28 10 48)"/><ellipse cx="20" cy="48" rx="3.5" ry="7" transform="rotate(28 20 48)"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
 <header class="hero">
-  <div class="wrap">
+  <svg class="hero-leaves" viewBox="0 0 800 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <use href="#maple" x="30" y="20" width="34" height="34" class="leaf-red" transform="rotate(-18 47 37)"/>
+    <use href="#oak" x="12" y="200" width="24" height="24" class="leaf-gold" transform="rotate(30 24 212)"/>
+    <use href="#maple" x="460" y="10" width="22" height="22" class="leaf-gold" transform="rotate(25 471 21)"/>
+    <use href="#maple" x="700" y="210" width="28" height="28" class="leaf-brown" transform="rotate(12 714 224)"/>
+  </svg>
+  <div class="wrap hero-grid">
+   <div>
     <p class="eyebrow">Stewpot Community Services</p>
     <h1>Serve a Thanksgiving meal, <em>restaurant-style</em></h1>
     <p class="lede">This year our Community Kitchen guests will order from a menu and be served at their tables. We need volunteers to wait tables and each sign-up to bring one dish.</p>
@@ -21,7 +64,18 @@
       <div><dt>Arrive</dt><dd id="f-time">10:45 a.m. – 1:30 p.m.</dd></div>
       <div><dt>Spots left</dt><dd id="f-spots">…</dd></div>
     </dl>
+   </div>
+    <svg class="hero-art" viewBox="0 0 220 200" role="img" aria-label="Pumpkin, wheat and autumn leaves">
+      <use href="#wheat" x="38" y="30" width="40" height="160" transform="rotate(-14 58 190)"/>
+      <use href="#wheat" x="62" y="18" width="40" height="170" transform="rotate(-4 82 188)"/>
+      <use href="#wheat" x="140" y="34" width="38" height="150" transform="rotate(16 159 184)"/>
+      <use href="#pumpkin" x="50" y="70" width="128" height="128"/>
+      <use href="#maple" x="8" y="140" width="48" height="48" class="leaf-red" transform="rotate(-24 32 164)"/>
+      <use href="#oak" x="170" y="140" width="40" height="40" class="leaf-gold" transform="rotate(20 190 160)"/>
+      <use href="#maple" x="160" y="6" width="30" height="30" class="leaf-gold" transform="rotate(16 175 21)"/>
+    </svg>
   </div>
+  <svg class="garland" viewBox="0 0 400 24" preserveAspectRatio="none" aria-hidden="true"><path d="M0 24V14C40 4 90 4 130 12S220 22 270 12 360 4 400 12V24Z" fill="var(--bg)"/></svg>
 </header>
 
 <main class="wrap">
@@ -59,10 +113,6 @@
         <hr>
         <div class="grid2">
           <label>Group name<input name="groupName" placeholder="e.g. Smith Family, Galloway UMC Youth"></label>
-          <label>Type of group
-            <select name="groupType"><option value="">Choose…</option></select>
-          </label>
-          <label id="group-other" hidden class="span2">What kind of group?<input name="groupTypeOther"></label>
           <label>How many people, including you?
             <select name="groupSize"></select>
           </label>
@@ -109,13 +159,28 @@
   </form>
 
   <section id="done" class="card done" hidden tabindex="-1">
+    <svg class="done-art" viewBox="0 0 120 90" aria-hidden="true">
+      <use href="#pumpkin" x="20" y="8" width="80" height="80"/>
+      <use href="#maple" x="0" y="44" width="30" height="30" class="leaf-red"/>
+      <use href="#oak" x="92" y="40" width="26" height="26" class="leaf-gold"/>
+    </svg>
     <h2>You're signed up — thank you!</h2>
     <p id="done-text"></p>
-    <p>Please arrive at <strong id="done-time"></strong> on <strong id="done-date"></strong>. If your plans change, contact Stewpot so we can open your spot to someone else.</p>
+    <p id="done-email" hidden></p>
+    <p>Please arrive by <strong id="done-time"></strong> on <strong id="done-date"></strong>.</p>
+    <div class="arrive">
+      <h3>Where to go</h3>
+      <p><a id="done-map" target="_blank" rel="noopener"><span id="done-address"></span></a></p>
+      <p><strong>Parking:</strong> <span id="done-parking"></span></p>
+      <p id="done-arrival"></p>
+      <p>Questions, or need help when you arrive? Call <a id="done-phone"></a>.</p>
+    </div>
+    <p class="hint">If your plans change, please call so we can offer your spot to someone else.</p>
   </section>
 </main>
 
 <footer class="wrap foot">Stewpot Community Services · Jackson, Mississippi</footer>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script>
 <script src="form.js"></script>
 </body>
 </html>

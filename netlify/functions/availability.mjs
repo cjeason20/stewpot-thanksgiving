@@ -1,4 +1,4 @@
-import { EVENT, DUTIES, GROUP_TYPES } from "./lib/config.mjs";
+import { EVENT, DUTIES } from "./lib/config.mjs";
 import { allSignups, tally, json, isClosed } from "./lib/store.mjs";
 
 // GET /.netlify/functions/availability
@@ -9,9 +9,9 @@ export default async () => {
     return json({
       event: EVENT,
       duties: DUTIES,
-      groupTypes: GROUP_TYPES,
       closed: isClosed() || t.spotsLeft === 0,
       spotsLeft: t.spotsLeft,
+      groupsLeft: t.groupsLeft,
       dishes: t.dishes.map(({ id, name, unit, unitPlural, details, needed, remaining, maxPer }) => ({
         id, name, unit, unitPlural, details, needed, remaining, maxPer,
       })),

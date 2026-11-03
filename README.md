@@ -4,11 +4,17 @@ Volunteer sign-up form for Stewpot's Thanksgiving dining experience. Static HTML
 
 ## What the form does
 
-- **Individual or group** – choosing "A group" reveals group name, type (with an "Other" text box), size (2–3, including the leader) and a name field per extra member.
+- **Individual or group** – choosing "A group" reveals group name, size (2–3, including the leader) and a name field per extra member. At most **5 group sign-ups** are accepted (`maxGroups`); after that the group option is disabled and individuals can still sign up.
 - **Volunteer cap (35 people)** – counted by headcount, so a group of 3 uses 3 spots. Group sizes larger than the remaining spots aren't offered; with 1 spot left the group option is disabled. At 0 spots the form is replaced by a "spots are filled" message.
 - **Dishes** – every sign-up brings one menu item. Each dish shows how much is still needed; fully covered dishes are greyed out. Choosing a dish shows its pan size/details and a quantity picker capped by what's still needed and a per-sign-up maximum.
 - **Duty preferences** – optional checkboxes for the five key duties.
 - **Server-side checks** – every rule is re-checked in `submit` against live data (cap, group size, dish remaining, duplicate email). A honeypot field filters basic bots.
+
+## Confirmation email
+
+After a successful sign-up the browser sends a plain-text confirmation via **EmailJS**, using the same service and client template as the intake form (`template_slosb0f`, params `to_email`, `to_name`, `subject`, `message`). It includes date, arrival time, the dish, the address/map link, parking and door instructions, and the phone number. The same details show on the thank-you screen. Address, parking and phone live in `config.mjs`.
+
+If EmailJS has **Allowed origins** restricted (EmailJS dashboard → Account → Security), add this site's domain there or the email will be blocked.
 
 ## Files
 
