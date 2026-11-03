@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Thanksgiving Sign-Ups · Admin</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .stat { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: #fff; }
+  .stat b { display: block; font-size: 22px; }
+  .stat small { color: var(--muted); }
+  .bar { height: 6px; background: var(--line); border-radius: 3px; margin-top: 6px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--leaf); }
+  .tbl { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .row-actions button, .toolbar button { font: 600 14px "Source Sans 3", sans-serif; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); background: #fff; cursor: pointer; }
+  .row-actions button { color: var(--err); }
+  .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .wide { max-width: 1100px; }
+</style>
+</head>
+<body>
+<main class="wrap wide" style="padding-top:24px">
+  <h1 style="font-family:Fraunces,Georgia,serif;margin:0 0 16px">Thanksgiving sign-ups</h1>
+
+  <form id="login" class="card" style="max-width:380px">
+    <label>Admin password<input type="password" id="pw" autocomplete="current-password" required></label>
+    <p id="login-err" class="error-msg" hidden></p>
+    <button type="submit">View sign-ups</button>
+  </form>
+
+  <div id="app" hidden>
+    <div class="toolbar">
+      <button id="refresh">Refresh</button>
+      <button id="csv">Download CSV</button>
+    </div>
+    <section class="card"><h2>Volunteers</h2><div class="stats" id="people"></div></section>
+    <section class="card"><h2>Dishes</h2><div class="stats" id="dishes"></div></section>
+    <section class="card"><h2>All sign-ups (<span id="count">0</span>)</h2>
+      <div class="tbl"><table>
+        <thead><tr><th>Signed up</th><th>Leader</th><th>Contact</th><th>Group</th><th>People</th><th>Dish</th><th>Duties</th><th>Notes</th><th></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table></div>
+    </section>
+  </div>
+</main>
+<script>
+(() => {
+  const API = "/.netlify/functions/signups";
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+  let pw = sessionStorageGet();
+  let last = null;
+
+  function sessionStorageGet() { try { return sessionStorage.getItem("tg-admin") || ""; } catch { return ""; } }
+  function sessionStorageSet(v) { try { v ? sessionStorage.setItem("tg-admin", v) : sessionStorage.removeItem("tg-admin"); } catch {} }
+
+  async function fetchData() {
+    const res = await fetch(API, { headers: { "x-admin-password": pw }, cache: "no-store" });
+    const out = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(out.error || "Could not load sign-ups.");
+    return out;
+  }
+
+  function render(d) {
+    last = d;
+    $("#people").innerHTML = `
+      <div class="stat"><b>${d.people} / ${d.cap}</b><small>volunteers signed up</small><div class="bar"><i style="width:${Math.min(100, d.people / d.cap * 100)}%"></i></div></div>
+      <div class="stat"><b>${d.spotsLeft}</b><small>spots left</small></div>
+      <div class="stat"><b>${d.signups.length}</b><small>sign-ups (individuals + groups)</small></div>`;
+    $("#dishes").innerHTML = d.dishes.map((x) => `
+      <div class="stat"><b>${x.claimed} / ${x.needed}</b><small>${esc(x.name)} · ${esc(x.unitPlural)}</small>
+      <div class="bar"><i style="width:${Math.min(100, x.claimed / x.needed * 100)}%"></i></div></div>`).join("");
+    $("#count").textContent = d.signups.length;
+    $("#rows").innerHTML = d.signups.map((s) => `<tr>
+      <td>${esc(new Date(s.submittedAt).toLocaleString("en-US", { timeZone: "America/Chicago", dateStyle: "short", timeStyle: "short" }))}</td>
+      <td>${esc(s.contact.firstName)} ${esc(s.contact.lastName)}</td>
+      <td>${esc(s.contact.email)}<br>${esc(s.contact.phone)}</td>
+      <td>${s.group ? `${esc(s.group.name)}<br><small>${esc(s.group.type === "Other" ? s.group.typeOther : s.group.type)}</small><br><small>+ ${s.group.members.map(esc).join(", ")}</small>` : "—"}</td>
+      <td>${s.headcount}</td>
+      <td>${s.dishQty} ${esc(s.dishUnit)} ${esc(s.dishName.toLowerCase())}</td>
+      <td>${s.duties.map(esc).join(", ") || "—"}</td>
+      <td>${esc(s.notes) || ""}</td>
+      <td class="row-actions"><button data-key="${esc(s.key)}" data-name="${esc(s.contact.firstName + " " + s.contact.lastName)}">Remove</button></td>
+    </tr>`).join("") || `<tr><td colspan="9">No sign-ups yet.</td></tr>`;
+  }
+
+  async function refresh() {
+    try { render(await fetchData()); }
+    catch (e) { $("#app").hidden = true; $("#login").hidden = false; $("#login-err").textContent = e.message; $("#login-err").hidden = false; sessionStorageSet(""); }
+  }
+
+  $("#login").addEventListener("submit", async (e) => {
+    e.preventDefault(); pw = $("#pw").value;
+    try { render(await fetchData()); sessionStorageSet(pw); $("#login").hidden = true; $("#app").hidden = false; }
+    catch (err) { $("#login-err").textContent = err.message; $("#login-err").hidden = false; }
+  });
+  $("#refresh").addEventListener("click", refresh);
+  $("#rows").addEventListener("click", async (e) => {
+    const b = e.target.closest("button[data-key]"); if (!b) return;
+    // Inline confirm (no browser dialogs): first click arms, second click removes.
+    if (b.dataset.armed !== "1") { b.dataset.armed = "1"; b.textContent = "Confirm remove"; setTimeout(() => { b.dataset.armed = ""; b.textContent = "Remove"; }, 4000); return; }
+    b.disabled = true;
+    await fetch(`${API}?key=${encodeURIComponent(b.dataset.key)}`, { method: "DELETE", headers: { "x-admin-password": pw } });
+    refresh();
+  });
+  $("#csv").addEventListener("click", () => {
+    if (!last) return;
+    const cols = ["Submitted", "Type", "First name", "Last name", "Email", "Phone", "Group name", "Group type", "Other members", "Headcount", "Dish", "Quantity", "Unit", "Duties", "Notes"];
+    const rows = last.signups.map((s) => [s.submittedAt, s.signupType, s.contact.firstName, s.contact.lastName, s.contact.email, s.contact.phone,
+      s.group?.name || "", s.group ? (s.group.type === "Other" ? s.group.typeOther : s.group.type) : "", s.group?.members.join("; ") || "",
+      s.headcount, s.dishName, s.dishQty, s.dishUnit, s.duties.join("; "), s.notes]);
+    const csv = [cols, ...rows].map((r) => r.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",")).join("\r\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+    a.download = `thanksgiving-signups-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+  });
+
+  if (pw) { $("#login").hidden = true; $("#app").hidden = false; refresh(); }
+})();
+</script>
+</body>
+</html>

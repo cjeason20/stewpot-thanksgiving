@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thanksgiving Volunteer Sign-Up · Stewpot Community Services</title>
+<meta name="description" content="Volunteer to serve at Stewpot's Thanksgiving dining experience and bring a dish.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Stewpot Community Services</p>
+    <h1>Serve a Thanksgiving meal, <em>restaurant-style</em></h1>
+    <p class="lede">This year our Community Kitchen guests will order from a menu and be served at their tables. We need volunteers to wait tables and each sign-up to bring one dish.</p>
+    <dl class="facts" id="facts">
+      <div><dt>When</dt><dd id="f-date">Thanksgiving Day</dd></div>
+      <div><dt>Arrive</dt><dd id="f-time">10:45 a.m. – 1:30 p.m.</dd></div>
+      <div><dt>Spots left</dt><dd id="f-spots">…</dd></div>
+    </dl>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="loading" class="notice">Loading open spots…</div>
+  <div id="load-error" class="notice error" hidden>We couldn't load the sign-up form. Please refresh the page, or contact Stewpot directly.</div>
+  <div id="closed" class="notice" hidden>
+    <h2>All volunteer spots are filled</h2>
+    <p>Thank you for your interest! Thanksgiving volunteer sign-ups are full. Keep an eye on Stewpot's other volunteer opportunities throughout the year.</p>
+  </div>
+
+  <form id="form" novalidate hidden>
+    <!-- 1. Who -->
+    <section class="card">
+      <h2><span class="num">1</span> Are you signing up alone or with a group?</h2>
+      <div class="choice-row" role="radiogroup" aria-label="Sign-up type">
+        <label class="choice"><input type="radio" name="signupType" value="individual" required>
+          <span><strong>Just me</strong><small>One volunteer</small></span></label>
+        <label class="choice" id="group-choice"><input type="radio" name="signupType" value="group">
+          <span><strong>A group</strong><small id="group-choice-note">Family, congregation, school… up to 3 people</small></span></label>
+      </div>
+      <p class="hint">To give more groups a chance to serve, groups are limited to <strong id="max-group">3</strong> people, including you.</p>
+    </section>
+
+    <!-- 2. Contact -->
+    <section class="card" data-step="contact" hidden>
+      <h2><span class="num">2</span> <span id="contact-title">Your contact info</span></h2>
+      <div class="grid2">
+        <label>First name<input name="firstName" autocomplete="given-name" required></label>
+        <label>Last name<input name="lastName" autocomplete="family-name" required></label>
+        <label>Email<input name="email" type="email" autocomplete="email" required></label>
+        <label>Phone<input name="phone" type="tel" autocomplete="tel" placeholder="(601) 555-0123" required></label>
+      </div>
+
+      <div id="group-fields" hidden>
+        <hr>
+        <div class="grid2">
+          <label>Group name<input name="groupName" placeholder="e.g. Smith Family, Galloway UMC Youth"></label>
+          <label>Type of group
+            <select name="groupType"><option value="">Choose…</option></select>
+          </label>
+          <label id="group-other" hidden class="span2">What kind of group?<input name="groupTypeOther"></label>
+          <label>How many people, including you?
+            <select name="groupSize"></select>
+          </label>
+        </div>
+        <fieldset id="members" class="members">
+          <legend>Other people in your group</legend>
+          <div id="member-inputs"></div>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- 3. Duties -->
+    <section class="card" data-step="duties" hidden>
+      <h2><span class="num">3</span> What would you like to help with?</h2>
+      <p class="hint">Optional. We'll do our best to match preferences, but everyone may be asked to pitch in where needed.</p>
+      <div id="duties" class="checks"></div>
+    </section>
+
+    <!-- 4. Dish -->
+    <section class="card" data-step="dish" hidden>
+      <h2><span class="num">4</span> Pick a dish to bring</h2>
+      <p class="hint">Every sign-up brings one menu item, <strong>warm and ready to serve</strong>. Items that are already covered are marked.</p>
+      <div id="dishes" class="dishes" role="radiogroup" aria-label="Dish"></div>
+      <div id="dish-detail" class="dish-detail" hidden>
+        <p id="dish-size"></p>
+        <label>How much will you bring?
+          <select name="dishQty" id="dishQty"></select>
+        </label>
+        <p class="hint" id="dish-left"></p>
+      </div>
+    </section>
+
+    <!-- 5. Confirm -->
+    <section class="card" data-step="confirm" hidden>
+      <h2><span class="num">5</span> Confirm</h2>
+      <label>Anything we should know? <span class="opt">(optional)</span>
+        <textarea name="notes" rows="3" placeholder="Accessibility needs, questions, etc."></textarea></label>
+      <label class="agree"><input type="checkbox" name="agree">
+        <span id="agree-text">I'll arrive by 10:45 a.m., stay through 1:30 p.m., and bring my dish warm and ready to serve.</span></label>
+      <div class="hp" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <p id="form-error" class="error-msg" role="alert" hidden></p>
+      <button type="submit" id="submit">Sign up to volunteer</button>
+    </section>
+  </form>
+
+  <section id="done" class="card done" hidden tabindex="-1">
+    <h2>You're signed up — thank you!</h2>
+    <p id="done-text"></p>
+    <p>Please arrive at <strong id="done-time"></strong> on <strong id="done-date"></strong>. If your plans change, contact Stewpot so we can open your spot to someone else.</p>
+  </section>
+</main>
+
+<footer class="wrap foot">Stewpot Community Services · Jackson, Mississippi</footer>
+<script src="form.js"></script>
+</body>
+</html>
