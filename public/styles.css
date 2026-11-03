@@ -20,14 +20,25 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.55 "Sou
 .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
 h1, h2 { font-family: Fraunces, Georgia, serif; line-height: 1.15; }
 
-.hero { position: relative; overflow: hidden; background: radial-gradient(120% 90% at 85% 10%, #5a3a26 0%, #3b2a20 60%); color: #fbf3e8; padding: 40px 0 52px; }
-.hero-grid { position: relative; display: grid; grid-template-columns: 1fr 220px; gap: 24px; align-items: center; }
-.hero-art { width: 100%; height: auto; }
+.hero {
+  --fh: 270px;                       /* rendered height of the feast scene */
+  --table: calc(var(--fh) * 0.1913); /* its tablecloth band (44/230 of the art) */
+  position: relative; overflow: hidden; color: #fbf3e8; padding: 44px 0 0;
+  background:
+    linear-gradient(to top, var(--bg) var(--table), #e6dccd var(--table), #e6dccd calc(var(--table) + 1.5px), transparent calc(var(--table) + 1.5px)),
+    radial-gradient(110% 80% at 50% 0%, #5a3a26 0%, #3b2a20 65%);
+}
+.hero-text { position: relative; text-align: center; }
+.hero h1 { font-size: clamp(38px, 8vw, 60px); margin: 0; letter-spacing: -.01em; }
+.subtitle { font: italic 600 clamp(20px, 3.6vw, 26px) Fraunces, Georgia, serif; color: #f0a477; margin: 4px 0 18px; }
+.lede { max-width: 62ch; margin: 0 auto 12px; color: #eadccb; }
+.hero .facts { max-width: 620px; margin: 22px auto 0; text-align: left; }
+.hero-feast { position: relative; display: block; height: var(--fh); width: auto; max-width: 100%; margin: 4px auto 0; }
 .hero-leaves { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .35; pointer-events: none; }
-.garland { position: absolute; left: 0; right: 0; bottom: -1px; width: 100%; height: 24px; display: block; }
 @media (max-width: 640px) {
-  .hero-grid { grid-template-columns: 1fr; gap: 0; }
-  .hero-art { order: -1; width: 150px; margin: -12px 0 6px -8px; }
+  .hero { --fh: min(220px, calc((100vw - 24px) * 0.575)); padding-top: 32px; }
+  .hero-text { text-align: left; }
+  .lede { margin-left: 0; }
 }
 .leaf-red { color: #b8432a; }
 .leaf-gold { color: #d99a2b; }
@@ -91,7 +102,7 @@ input:focus, select:focus, textarea:focus { outline: 3px solid var(--brand-soft)
 .dishes { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
 .dish { position: relative; cursor: pointer; }
 .dish input { position: absolute; opacity: 0; }
-.dish span { display: flex; flex-direction: column; gap: 2px; border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 14px; height: 100%; }
+.dish span { display: grid; grid-template-columns: 44px 1fr; column-gap: 12px; align-items: center; border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 14px; height: 100%; }
 .dish b { font-size: 16px; }
 .dish small { color: var(--muted); font-size: 14px; }
 .dish .left { color: var(--leaf); font-weight: 600; }
@@ -118,3 +129,6 @@ button[type=submit]:disabled { opacity: .6; cursor: progress; }
 .done { border-color: var(--leaf); background: var(--leaf-soft); }
 .done h2 { color: var(--leaf); margin-top: 0; }
 .foot { color: var(--muted); font-size: 14px; padding: 8px 16px 40px; }
+
+.dish .icon { grid-row: span 2; width: 44px; height: 44px; }
+.dish.full .icon { filter: grayscale(1); opacity: .45; }

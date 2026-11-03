@@ -10,6 +10,14 @@
   let data = null;
 
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+  // Food icon (symbol in index.html) and pan-filling colour for each dish.
+  const ICONS = {
+    "sweet-tea": ["i-tea"], "cornbread": ["i-muffin"], "rolls": ["i-roll"],
+    "cranberry-sauce": ["i-cranberry"], "sweet-potato-pie": ["i-pie"],
+    "candied-yams": ["i-pan", "#d9622b"], "potato-salad": ["i-pan", "#eadba0"],
+    "collard-greens": ["i-pan", "#3f6b2e"], "green-beans": ["i-pan", "#6f9a3a"],
+    "black-eyed-peas": ["i-pan", "#c7b085"], "mac-and-cheese": ["i-pan", "#f0b93a"],
+  };
   const plural = (n, d) => (n === 1 ? d.unit : d.unitPlural);
 
   async function load() {
@@ -62,9 +70,10 @@
     const prevDish = form.querySelector("input[name=dishId]:checked")?.value;
     $("#dishes").innerHTML = data.dishes.map((d) => {
       const full = d.remaining === 0;
+      const [icon, color] = ICONS[d.id] || ["i-pan", "#c9844a"];
       return `<label class="dish${full ? " full" : ""}">
         <input type="radio" name="dishId" value="${d.id}"${full ? " disabled" : ""}>
-        <span><b>${esc(d.name)}</b>
+        <span><svg class="icon" aria-hidden="true" style="color:${color}"><use href="#${icon}"/></svg><b>${esc(d.name)}</b>
         <small class="left">${full ? "Covered — thank you!" : `${d.remaining} ${plural(d.remaining, d)} still needed`}</small></span></label>`;
     }).join("");
     const keep = prevDish && data.dishes.find((d) => d.id === prevDish && d.remaining > 0);
@@ -213,7 +222,7 @@
     const message =
 `Hi ${p.firstName.trim()},
 
-Thank you for signing up to volunteer at Stewpot's ${ev.title}! Here are your details:
+Thank you for signing up to volunteer at ${ev.title}! Here are your details:
 
 Date: ${ev.dateLabel}
 Arrive by: ${ev.arrival} (service runs ${ev.serviceWindow})
@@ -236,7 +245,7 @@ Stewpot Community Services`;
       await window.emailjs.send(EJS.serviceId, EJS.templateId, {
         to_email: p.email.trim(),
         to_name: p.firstName.trim(),
-        subject: `You're confirmed: Stewpot Thanksgiving, ${ev.dateLabel}`,
+        subject: `Your seat at the table is saved: Stewpot Thanksgiving, ${ev.dateLabel}`,
         message,
       });
       return true;

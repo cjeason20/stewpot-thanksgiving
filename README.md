@@ -1,6 +1,6 @@
 # Stewpot Thanksgiving Volunteer Sign-Up
 
-Volunteer sign-up form for Stewpot's Thanksgiving dining experience. Static HTML + Netlify Functions + Netlify Blobs (no build framework).
+Volunteer sign-up form for **A Seat at the Table: Stewpot's Thanksgiving Celebration**. Static HTML + Netlify Functions + Netlify Blobs (no build framework).
 
 ## What the form does
 

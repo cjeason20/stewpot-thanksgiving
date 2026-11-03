@@ -2,7 +2,7 @@
 // from the /availability function, so nothing else needs to change.
 
 export const EVENT = {
-  title: "Thanksgiving Dining Experience",
+  title: "A Seat at the Table: Stewpot's Thanksgiving Celebration",
   dateLabel: "Thursday, November 26, 2026",
   arrival: "10:45 a.m.",
   serviceWindow: "10:45 a.m. – 1:30 p.m.",
