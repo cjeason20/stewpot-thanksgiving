@@ -1,17 +1,17 @@
 <!--
   Paste this into a Squarespace Code Block (Edit page → + Add block → Code; Display Source unchecked).
-  Replace https://YOUR-SITE.netlify.app (twice) with the form's real address.
+  Replace PASTE-FORM-ADDRESS-HERE (twice) with the form's real address, e.g. https://stewpot-thanksgiving.netlify.app (no slash at the end).
   - The iframe alone works on any plan; it starts 2600px tall and scrolls inside if needed.
   - The <script> lets the frame grow/shrink with the form so there's no inner scrollbar.
 -->
 <iframe id="stewpot-thanksgiving"
-  src="https://YOUR-SITE.netlify.app/?embed=1"
+  src="PASTE-FORM-ADDRESS-HERE/?embed=1"
   title="A Seat at the Table: Thanksgiving volunteer sign-up"
   style="display:block;width:100%;height:2600px;border:0;"
   loading="lazy"></iframe>
 <script>
 (function () {
-  var ORIGIN = "https://YOUR-SITE.netlify.app";
+  var ORIGIN = "PASTE-FORM-ADDRESS-HERE";
   var frame = document.getElementById("stewpot-thanksgiving");
   window.addEventListener("message", function (e) {
     if (e.origin !== ORIGIN || !e.data) return;

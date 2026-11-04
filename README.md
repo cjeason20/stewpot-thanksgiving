@@ -44,5 +44,5 @@ Sign-ups are stored in the Blobs store `thanksgiving-signups` (one entry per sig
 
 ## Embedding on Squarespace
 
-Paste `squarespace-embed.html` into a Squarespace **Code Block** and replace `https://YOUR-SITE.netlify.app` (twice) with the site's address.
+Paste `squarespace-embed.html` into a Squarespace **Code Block** and replace `PASTE-FORM-ADDRESS-HERE` (twice) with the site's address.
 `?embed=1` hides the logo bar (the Squarespace page has its own header). The form posts its height to the parent page so the iframe resizes to fit; if the Squarespace plan strips the `<script>`, the iframe still works at a fixed 2600px height with inner scrolling.
