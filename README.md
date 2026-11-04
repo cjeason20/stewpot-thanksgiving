@@ -12,7 +12,7 @@ Volunteer sign-up form for **A Seat at the Table: Stewpot's Thanksgiving Celebra
 
 ## Confirmation email
 
-After a successful sign-up the browser sends a plain-text confirmation via **EmailJS**, using the same service and client template as the intake form (`template_slosb0f`, params `to_email`, `to_name`, `subject`, `message`). It includes date, arrival time, the dish, the address/map link, parking and door instructions, and the phone number. The same details show on the thank-you screen. Address, parking and phone live in `config.mjs`.
+After a successful sign-up the browser sends a plain-text confirmation via **EmailJS**, using the intake form's EmailJS service and its own template (`template_ojdfp0h`, params `to_email`, `to_name`, `subject`, `message`). It includes date, arrival time, the dish, the address/map link, parking and door instructions, and the phone number. The same details show on the thank-you screen. Address, parking and phone live in `config.mjs`.
 
 If EmailJS has **Allowed origins** restricted (EmailJS dashboard → Account → Security), add this site's domain there or the email will be blocked.
 

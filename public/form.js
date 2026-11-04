@@ -1,8 +1,8 @@
 (() => {
   const API = "/.netlify/functions";
-  // EmailJS — same account, service and client template as the intake form.
+  // EmailJS — same account and service as the intake form, with its own Thanksgiving template.
   // The template must have "To Email" = {{to_email}} and use {{subject}} / {{message}}.
-  const EJS = { publicKey: "I1vXCOCxiey4n_sN2", serviceId: "service_el38inc", templateId: "template_slosb0f" };
+  const EJS = { publicKey: "I1vXCOCxiey4n_sN2", serviceId: "service_el38inc", templateId: "template_ojdfp0h" };
   try { window.emailjs?.init({ publicKey: EJS.publicKey }); } catch {}
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
