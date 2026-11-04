@@ -13,7 +13,7 @@
   // Food icon (symbol in index.html) and pan-filling colour for each dish.
   const ICONS = {
     "sweet-tea": ["i-tea"], "cornbread": ["i-muffin"], "rolls": ["i-roll"],
-    "cranberry-sauce": ["i-cranberry"], "sweet-potato-pie": ["i-pie"],
+    "cranberry-sauce": ["i-cranberry"], "chocolate-cake": ["i-cake", "#5a2f1c", "#3b1d10"], "yellow-cake": ["i-cake", "#f2c94c", "#fbf3e2"],
     "candied-yams": ["i-pan", "#d9622b"], "potato-salad": ["i-pan", "#eadba0"],
     "collard-greens": ["i-pan", "#3f6b2e"], "green-beans": ["i-pan", "#6f9a3a"],
     "black-eyed-peas": ["i-pan", "#c7b085"], "mac-and-cheese": ["i-pan", "#f0b93a"],
@@ -34,7 +34,7 @@
     $("#f-time").textContent = ev.serviceWindow;
     $("#f-spots").textContent = `${data.spotsLeft} of ${ev.volunteerCap}`;
     $("#max-group").textContent = ev.maxGroupSize;
-    $("#agree-text").textContent = `I'll arrive by ${ev.arrival}, stay through the end of service (${ev.serviceWindow.split("–").pop().trim()}), and bring my dish warm and ready to serve.`;
+    $("#agree-text").textContent = `I'll arrive by ${ev.arrival}, stay through the end of service (${ev.serviceWindow.split("–").pop().trim()}), and bring my dish ready to serve (hot dishes warm).`;
 
     // Whole form closes when there are no spots or no dishes left.
     const anyDish = data.dishes.some((d) => d.remaining > 0);
@@ -70,10 +70,10 @@
     const prevDish = form.querySelector("input[name=dishId]:checked")?.value;
     $("#dishes").innerHTML = data.dishes.map((d) => {
       const full = d.remaining === 0;
-      const [icon, color] = ICONS[d.id] || ["i-pan", "#c9844a"];
+      const [icon, color, frost] = ICONS[d.id] || ["i-pan", "#c9844a"];
       return `<label class="dish${full ? " full" : ""}">
         <input type="radio" name="dishId" value="${d.id}"${full ? " disabled" : ""}>
-        <span><svg class="icon" aria-hidden="true" style="color:${color}"><use href="#${icon}"/></svg><b>${esc(d.name)}</b>
+        <span><svg class="icon" aria-hidden="true" style="color:${color};${frost ? `--frost:${frost}` : ""}"><use href="#${icon}"/></svg><b>${esc(d.name)}</b>
         <small class="left">${full ? "Covered — thank you!" : `${d.remaining} ${plural(d.remaining, d)} still needed`}</small></span></label>`;
     }).join("");
     const keep = prevDish && data.dishes.find((d) => d.id === prevDish && d.remaining > 0);
@@ -226,7 +226,7 @@ Thank you for signing up to volunteer at ${ev.title}! Here are your details:
 
 Date: ${ev.dateLabel}
 Arrive by: ${ev.arrival} (service runs ${ev.serviceWindow})
-${group}You're bringing: ${summary.dish}, warm and ready to serve
+${group}You're bringing: ${summary.dish}, ready to serve (hot dishes should arrive warm)
 ${duties}
 WHERE TO GO
 ${ev.address.join("\n")}

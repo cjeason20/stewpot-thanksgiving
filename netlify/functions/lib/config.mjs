@@ -41,6 +41,7 @@ export const DISHES = [
   { id: "cornbread",       name: "Cornbread muffins",  needed: 20, unit: "pack of 12",      unitPlural: "packs of 12",      maxPer: 5,  details: "Packs of 12 muffins." },
   { id: "rolls",           name: "Ready-serve rolls",  needed: 20, unit: "pack of 12",      unitPlural: "packs of 12",      maxPer: 5,  details: "Packs of 12 rolls." },
   { id: "cranberry-sauce", name: "Cranberry sauce",    needed: 3,  unit: "half-size pan",   unitPlural: "half-size pans",   maxPer: 2,  details: '11.8" × 9.4" × 2.4" half-size aluminum pan.' },
-  { id: "sweet-potato-pie",name: "Sweet potato pie",   needed: 25, unit: "pie",             unitPlural: "pies",             maxPer: 5,  details: "Whole pies — we'll slice them the day of." },
+  { id: "chocolate-cake",  name: "Chocolate cake",     needed: 6,  unit: "cake",            unitPlural: "cakes",            maxPer: 2,  details: "Whole frosted cakes — we'll slice them the day of." },
+  { id: "yellow-cake",     name: "Yellow cake",        needed: 6,  unit: "cake",            unitPlural: "cakes",            maxPer: 2,  details: "Whole frosted cakes — we'll slice them the day of." },
 ];
 
