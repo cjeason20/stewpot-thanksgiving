@@ -195,6 +195,9 @@
       $("#done-parking").textContent = ev.parking;
       $("#done-arrival").textContent = ev.arrivalNote;
       $("#done-phone").textContent = ev.phone;
+      $("#done-contact-name").textContent = `${ev.contact.name}, ${ev.contact.title}`;
+      $("#done-contact-email").textContent = ev.contact.email;
+      $("#done-contact-email").href = "mailto:" + ev.contact.email;
       $("#done-phone").href = "tel:" + ev.phone.replace(/\D/g, "");
       $("#done").hidden = false; $("#done").focus();
       sendConfirmation(p, out.summary).then((ok) => {
@@ -239,7 +242,11 @@ ${ev.parking}
 
 ${ev.arrivalNote} If you have any questions in the meantime or need assistance when you arrive, please call ${ev.phone}.
 
-If your plans change, please call us so we can offer your spot to someone else.
+POINT OF CONTACT
+${ev.contact.name}, ${ev.contact.title}
+${ev.contact.email}
+
+If your plans change, please let ${ev.contact.name.split(" ")[0]} know so we can offer your spot to someone else.
 
 With gratitude,
 Stewpot Community Services`;

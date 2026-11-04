@@ -14,6 +14,7 @@ export const EVENT = {
   address: ["1100 West Capitol Street", "Jackson, MS 39203"],
   mapUrl: "https://www.google.com/maps/search/1100+West+Capitol+Street+Jackson,+MS+39203",
   phone: "601-808-3050",
+  contact: { name: "Contyna McNealy", title: "Director of Volunteer Programs", email: "cmcnealy@stewpot.org" },
   parking: "Please park in the lot reserved for volunteers. The lot is gated and will have a few Stewpot vehicles parked inside. As a landmark, it's located right next to the old Masonic Temple building on the corner of Monument and Capitol Streets.",
   arrivalNote: "Once you arrive, ring the doorbell beside the white double doors, and someone will let you in.",
 };
