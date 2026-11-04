@@ -175,3 +175,4 @@ button[type=submit] { max-width: 420px; display: block; margin-left: auto; margi
 /* ---------- Embedded (?embed=1) ---------- */
 .embed .topbar { display: none; }
 .embed .hero { padding-top: 28px; }
+.email-error { color: var(--muted); font-size: 13px; }

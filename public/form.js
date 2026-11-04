@@ -200,12 +200,18 @@
       $("#done-contact-email").href = "mailto:" + ev.contact.email;
       $("#done-phone").href = "tel:" + ev.phone.replace(/\D/g, "");
       $("#done").hidden = false; $("#done").focus();
-      sendConfirmation(p, out.summary).then((ok) => {
+      sendConfirmation(p, out.summary).then((result) => {
         const el = $("#done-email");
         el.hidden = false;
-        el.textContent = ok
+        el.textContent = result === true
           ? `A confirmation email with these details is on its way to ${p.email.trim()}.`
           : "We couldn't send your confirmation email, but your sign-up is saved. Please screenshot or save this page for the details below.";
+        if (result !== true) {
+          const why = document.createElement("small");
+          why.className = "email-error";
+          why.textContent = `(Email error: ${result})`;
+          el.append(document.createElement("br"), why);
+        }
       });
       window.scrollTo({ top: 0, behavior: "smooth" });
       tellParent({ type: "stewpot-scroll" });
@@ -218,7 +224,7 @@
 
   // Confirmation email via EmailJS (plain text, like the intake form's client email).
   async function sendConfirmation(p, summary) {
-    if (!window.emailjs) return false;
+    if (!window.emailjs) return "email script didn't load (blocked by the browser or an ad blocker?)";
     const ev = data.event;
     const group = p.signupType === "group"
       ? `Group: ${p.groupName.trim()} (${summary.headcount} people: ${[`${p.firstName.trim()} ${p.lastName.trim()}`, ...p.members.map((m) => m.trim())].join(", ")})\n`
@@ -260,7 +266,7 @@ Stewpot Community Services`;
       return true;
     } catch (err) {
       console.warn("Confirmation email failed:", err);
-      return false;
+      return [err?.status, err?.text || err?.message || String(err)].filter(Boolean).join(" ");
     }
   }
 
