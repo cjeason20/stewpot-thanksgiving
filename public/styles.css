@@ -171,3 +171,7 @@ button[type=submit] { max-width: 420px; display: block; margin-left: auto; margi
   .checks { grid-template-columns: 1fr; width: fit-content; }
 }
 @media (min-width: 900px) { .hero { --fh: 330px; } }
+
+/* ---------- Embedded (?embed=1) ---------- */
+.embed .topbar { display: none; }
+.embed .hero { padding-top: 28px; }

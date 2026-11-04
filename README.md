@@ -41,3 +41,8 @@ Sign-ups are stored in the Blobs store `thanksgiving-signups` (one entry per sig
 - Quantities, date, cap or group max: edit `config.mjs` and push. Existing sign-ups stay.
 - Close sign-ups early: set `closeAt` in `config.mjs`.
 - Cancellation: remove the sign-up in `admin.html`. Its spots and dish quantity open back up immediately.
+
+## Embedding on Squarespace
+
+Paste `squarespace-embed.html` into a Squarespace **Code Block** and replace `https://YOUR-SITE.netlify.app` (twice) with the site's address.
+`?embed=1` hides the logo bar (the Squarespace page has its own header). The form posts its height to the parent page so the iframe resizes to fit; if the Squarespace plan strips the `<script>`, the iframe still works at a fixed 2600px height with inner scrolling.

@@ -156,6 +156,7 @@
     if (el) {
       if (el.matches?.("input:not([type=radio]):not([type=checkbox]), select, textarea")) el.classList.add("invalid");
       el.scrollIntoView({ behavior: "smooth", block: "center" });
+      form.dispatchEvent(new CustomEvent("invalid-focus", { detail: Math.max(0, el.getBoundingClientRect().top + window.scrollY - 120) }));
       el.focus?.({ preventScroll: true });
     }
   }
@@ -204,6 +205,7 @@
           : "We couldn't send your confirmation email, but your sign-up is saved. Please screenshot or save this page for the details below.";
       });
       window.scrollTo({ top: 0, behavior: "smooth" });
+      tellParent({ type: "stewpot-scroll" });
     } catch {
       showError("We couldn't reach the server. Check your connection and try again.");
     } finally {
@@ -253,6 +255,23 @@ Stewpot Community Services`;
       console.warn("Confirmation email failed:", err);
       return false;
     }
+  }
+
+  // ---- Embedding (e.g. Squarespace) ----
+  // Add ?embed=1 to the URL to hide the logo bar. When the page is inside an iframe it
+  // reports its height to the parent page so the frame can grow and shrink with the form.
+  function tellParent(msg) { if (window.parent !== window) try { window.parent.postMessage(msg, "*"); } catch {} }
+  if (new URLSearchParams(location.search).has("embed")) document.documentElement.classList.add("embed");
+  if (window.parent !== window) {
+    let last = 0;
+    const send = () => {
+      const h = Math.ceil(document.body.getBoundingClientRect().height);
+      if (h !== last) { last = h; tellParent({ type: "stewpot-height", height: h }); }
+    };
+    new ResizeObserver(send).observe(document.body);
+    window.addEventListener("load", send);
+    // Validation errors scroll a field into view; inside an iframe, ask the parent to scroll instead.
+    form.addEventListener("invalid-focus", (e) => tellParent({ type: "stewpot-scroll-to", offset: e.detail }));
   }
 
   load().catch(() => { $("#loading").hidden = true; $("#load-error").hidden = false; });
