@@ -31,18 +31,19 @@ const FULL_PAN = '20 3/4" × 12 3/4" × 2 1/5" full-size disposable aluminum ste
 
 // needed  = total units Stewpot needs
 // unit    = what one unit is (shown in the quantity picker)
-// maxPer  = most units a single sign-up can claim (keeps dishes spread across groups)
+// maxPer  = most units a single sign-up can claim (set equal to needed = no extra limit;
+//           lower it to spread a dish across more sign-ups)
 export const DISHES = [
-  { id: "sweet-tea",       name: "Sweet tea",          needed: 20, unit: "gallon",          unitPlural: "gallons",          maxPer: 5,  details: "Brewed and sweetened, in gallon jugs." },
-  { id: "candied-yams",    name: "Candied yams",       needed: 5,  unit: "full-size pan",   unitPlural: "full-size pans",   maxPer: 2,  details: FULL_PAN },
-  { id: "potato-salad",    name: "Potato salad",       needed: 3,  unit: "full-size pan",   unitPlural: "full-size pans",   maxPer: 2,  details: FULL_PAN },
-  { id: "collard-greens",  name: "Collard greens",     needed: 5,  unit: "full-size pan",   unitPlural: "full-size pans",   maxPer: 2,  details: FULL_PAN },
-  { id: "green-beans",     name: "Green beans",        needed: 5,  unit: "full-size pan",   unitPlural: "full-size pans",   maxPer: 2,  details: FULL_PAN },
-  { id: "black-eyed-peas", name: "Black-eyed peas",    needed: 5,  unit: "full-size pan",   unitPlural: "full-size pans",   maxPer: 2,  details: FULL_PAN },
-  { id: "cornbread",       name: "Cornbread muffins",  needed: 20, unit: "pack of 12",      unitPlural: "packs of 12",      maxPer: 5,  details: "Packs of 12 muffins." },
-  { id: "rolls",           name: "Ready-serve rolls",  needed: 20, unit: "pack of 12",      unitPlural: "packs of 12",      maxPer: 5,  details: "Packs of 12 rolls." },
-  { id: "cranberry-sauce", name: "Cranberry sauce",    needed: 3,  unit: "half-size pan",   unitPlural: "half-size pans",   maxPer: 2,  details: '11.8" × 9.4" × 2.4" half-size aluminum pan.' },
-  { id: "chocolate-cake",  name: "Chocolate cake",     needed: 6,  unit: "cake",            unitPlural: "cakes",            maxPer: 2,  details: "Whole frosted cakes — we'll slice them the day of." },
-  { id: "yellow-cake",     name: "Yellow cake",        needed: 6,  unit: "cake",            unitPlural: "cakes",            maxPer: 2,  details: "Whole frosted cakes — we'll slice them the day of." },
+  { id: "sweet-tea",       name: "Sweet tea",          needed: 20, unit: "gallon",          unitPlural: "gallons",          maxPer: 20,  details: "Brewed and sweetened, in gallon jugs." },
+  { id: "candied-yams",    name: "Candied yams",       needed: 5,  unit: "full-size pan",   unitPlural: "full-size pans",   maxPer: 5,  details: FULL_PAN },
+  { id: "potato-salad",    name: "Potato salad",       needed: 3,  unit: "full-size pan",   unitPlural: "full-size pans",   maxPer: 3,  details: FULL_PAN },
+  { id: "collard-greens",  name: "Collard greens",     needed: 5,  unit: "full-size pan",   unitPlural: "full-size pans",   maxPer: 5,  details: FULL_PAN },
+  { id: "green-beans",     name: "Green beans",        needed: 5,  unit: "full-size pan",   unitPlural: "full-size pans",   maxPer: 5,  details: FULL_PAN },
+  { id: "black-eyed-peas", name: "Black-eyed peas",    needed: 5,  unit: "full-size pan",   unitPlural: "full-size pans",   maxPer: 5,  details: FULL_PAN },
+  { id: "cornbread",       name: "Cornbread muffins",  needed: 20, unit: "pack of 12",      unitPlural: "packs of 12",      maxPer: 20,  details: "Packs of 12 muffins." },
+  { id: "rolls",           name: "Ready-serve rolls",  needed: 20, unit: "pack of 12",      unitPlural: "packs of 12",      maxPer: 20,  details: "Packs of 12 rolls." },
+  { id: "cranberry-sauce", name: "Cranberry sauce",    needed: 3,  unit: "half-size pan",   unitPlural: "half-size pans",   maxPer: 3,  details: '11.8" × 9.4" × 2.4" half-size aluminum pan.' },
+  { id: "chocolate-cake",  name: "Chocolate cake",     needed: 6,  unit: "cake",            unitPlural: "cakes",            maxPer: 6,  details: "Whole frosted cakes — we'll slice them the day of." },
+  { id: "yellow-cake",     name: "Yellow cake",        needed: 6,  unit: "cake",            unitPlural: "cakes",            maxPer: 6,  details: "Whole frosted cakes — we'll slice them the day of." },
 ];
 
